@@ -14,8 +14,12 @@ new Vue({
                 this.keeps = Response.data
             });
         },
-        deleteKeep: function() {
-            alert('eliminar');
+        deleteKeep: function(keep) {
+            var url = 'tasks/' + keep.id;
+            axios.delete(url).then(Response => {
+                this.getKeeps();
+                toastr.success('Eliminado correctamente');
+            });
         }
     }
 });
