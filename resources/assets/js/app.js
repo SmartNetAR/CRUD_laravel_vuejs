@@ -7,6 +7,10 @@ new Vue({
     data: {
         keeps: [],
         newKeep: '',
+        fillKeep: {
+            id: '',
+            keep: ''
+        },
         errors: ''
     },
     methods: {
@@ -34,9 +38,26 @@ new Vue({
 				$('#create').modal('hide');
 				toastr.success('Nueva tarea creada con éxito');
 			}).catch(error => {
-                console.log(error.response.data);
 				this.errors = 'Corrija para poder crear con éxito'
 			});
+        },
+        editKeep: function(keep) {
+            this.fillKeep.id = keep.id;
+            this.fillKeep.keep = keep.keep;
+            $('#edit').modal('show');
+        },
+        updateKeep: function(id) {
+            var url = 'tasks/' + id;
+            axios.put(url, this.fillKeep)
+            .then(response => {
+                this.getKeeps();
+                this.fillKeep = {id: '', keep: ''};
+                this.errors = '';
+                $('#edit').modal('hide');
+                toastr.success('Tarea actualizada con éxito');
+            }).catch(error => {
+                this.errors = 'Problemas para actualizar la tarea'
+            });
         }
     }
 });
